@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BiMath: Statistika Menyenangkan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f9ff;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 100, 150, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2c7873, #004445);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            border-bottom: 8px solid #ff9a00;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 30px;
+        }
+        
+        .main-content {
+            flex: 3;
+            min-width: 300px;
+            padding-right: 30px;
+        }
+        
+        .sidebar {
+            flex: 1;
+            min-width: 280px;
+            background-color: #f8fffb;
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 5px solid #2c7873;
+        }
+        
+        h2 {
+            color: #004445;
+            margin: 25px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #ff9a00;
+        }
+        
+        h3 {
+            color: #2c7873;
+            margin: 20px 0 10px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        .card {
+            background-color: #f0f9ff;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #2c7873;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .data-card {
+            background: linear-gradient(135deg, #4a90e2 0%, #2c7873 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .interactive-area {
+            background-color: #e6f7ff;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 2px dashed #2c7873;
+        }
+        
+        .example-box {
+            background-color: #fff8e1;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #ff9a00;
+        }
+        
+        .problem-box {
+            background-color: #e8f5e9;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #4caf50;
+        }
+        
+        .data-problem-box {
+            background-color: #e3f2fd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #2196f3;
+        }
+        
+        .variable {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+        
+        .data-variable {
+            color: #ffeb3b;
+            font-weight: bold;
+        }
+        
+        .equation {
+            font-family: 'Courier New', monospace;
+            background-color: #f5f5f5;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #2c7873;
+            font-size: 1.2rem;
+        }
+        
+        .data-equation {
+            font-family: 'Courier New', monospace;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #ff9a00;
+            font-size: 1.2rem;
+        }
+        
+        button {
+            background-color: #2c7873;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background-color: #004445;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .data-button {
+            background-color: #2196f3;
+        }
+        
+        .data-button:hover {
+            background-color: #0b7dda;
+        }
+        
+        input, select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin: 10px 5px;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .result {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #4caf50;
+            display: none;
+        }
+        
+        .data-result {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .result.show {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background-color: #e0e0e0;
+            border-radius: 6px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: #4caf50;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .quiz-container {
+            margin: 30px 0;
+        }
+        
+        .quiz-question {
+            margin-bottom: 20px;
+        }
+        
+        .quiz-option {
+            background-color: #f0f9ff;
+            padding: 12px 15px;
+            margin: 8px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .quiz-option:hover {
+            background-color: #e0f7ff;
+        }
+        
+        .quiz-option.correct {
+            background-color: #c8e6c9;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .quiz-option.incorrect {
+            background-color: #ffcdd2;
+            border-left: 4px solid #f44336;
+        }
+        
+        .fun-fact {
+            background-color: #fff3cd;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #ffc107;
+        }
+        
+        .data-fun-fact {
+            background-color: #e8f5e9;
+            border-left: 5px solid #4caf50;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 25px;
+            background-color: #004445;
+            color: white;
+            margin-top: 30px;
+        }
+        
+        .highlight {
+            background-color: #fffacd;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        
+        .data-highlight {
+            background-color: #bbdefb;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+        
+        .data-tool {
+            background-color: #e8f5e9;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #4caf50;
+        }
+        
+        .data-table {
+            font-family: 'Courier New', monospace;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        th {
+            background-color: #2c7873;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .main-content {
+                padding-right: 0;
+            }
+            
+            .sidebar {
+                margin-top: 30px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .chart-container {
+                height: 250px;
+            }
+        }
+        
+        .data-point {
+            display: inline-block;
+            background-color: #2196f3;
+            color: white;
+            padding: 5px 10px;
+            margin: 3px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-chart-bar"></i> 
+                <a href="https://sites.google.com/view/rumahmath/home" target="blank" style="color: white; text-decoration: none;">BiMath:</a> Statistika & Analisis Data
+            </h1>
+            <p class="subtitle">Belajar statistika dan analisis data dengan cara yang mudah, interaktif, dan menyenangkan! Temukan bagaimana data digunakan dalam kehidupan sehari-hari dan teknologi modern.</p>
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+        </header>
+        
+        <div class="content">
+            <div class="main-content">
+                <section id="pengertian">
+                    <h2><i class="fas fa-book-open"></i> Apa Itu Statistika?</h2>
+                    <p>Statistika adalah ilmu yang mempelajari cara mengumpulkan, menganalisis, menginterpretasi, dan menyajikan data. Statistika membantu kita membuat keputusan berdasarkan data yang ada.</p>
+                    
+                    <div class="card">
+                        <h3>Mengapa Belajar Statistika di Era Digital?</h3>
+                        <p>Statistika membantu kita:</p>
+                        <ul>
+                            <li>Membuat keputusan berdasarkan data, bukan asumsi</li>
+                            <li>Memahami tren dan pola dalam data yang kompleks</li>
+                            <li>Mengembangkan kemampuan berpikir kritis dan analitis</li>
+                            <li>Memahami dasar-dasar Data Science dan AI</li>
+                            <li>Mempersiapkan diri untuk karir di bidang teknologi dan penelitian</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <section id="konsep-dasar">
+                    <h2><i class="fas fa-cubes"></i> Konsep Dasar Statistika</h2>
+                    
+                    <h3>Data</h3>
+                    <p>Data adalah kumpulan fakta, angka, atau informasi yang dikumpulkan untuk dianalisis. Contoh: nilai ujian siswa, tinggi badan, jumlah pengunjung website.</p>
+                    
+                    <h3>Populasi dan Sampel</h3>
+                    <p><strong>Populasi</strong> adalah keseluruhan kelompok yang ingin diteliti. <strong>Sampel</strong> adalah bagian dari populasi yang benar-benar diteliti.</p>
+                    
+                    <h3>Ukuran Pemusatan Data</h3>
+                    <p>Tiga ukuran utama: <span class="equation">Mean (Rata-rata)</span>, <span class="equation">Median (Nilai Tengah)</span>, dan <span class="equation">Modus (Nilai Paling Sering Muncul)</span>.</p>
+                    
+                    <h3>Ukuran Penyebaran Data</h3>
+                    <p>Mengukur sebaran data: <span class="equation">Range (Jangkauan)</span>, <span class="equation">Varians</span>, dan <span class="equation">Simpangan Baku</span>.</p>
+                </section>
+                
+                <section id="data-connection">
+                    <h2><i class="fas fa-database"></i> Statistika dalam Data Science</h2>
+                    
+                    <div class="data-card">
+                        <h3><i class="fas fa-chart-line"></i> Statistika: Bahasa Universal Data Science</h3>
+                        <p>Data Science dan Analisis Data sangat bergantung pada statistika. Setiap analisis data menggunakan:</p>
+                        <ul>
+                            <li><span class="data-variable">Deskripsi Statistik</span> untuk memahami data</li>
+                            <li><span class="data-variable">Probabilitas</span> untuk prediksi dan estimasi</li>
+                            <li><span class="data-variable">Uji Hipotesis</span> untuk pengambilan keputusan</li>
+                            <li><span class="data-variable">Analisis Regresi</span> untuk menemukan hubungan antar variabel</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="data-tool">
+                        <h3><i class="fas fa-chart-bar"></i> Visualisasi Data: Analisis Nilai Siswa</h3>
+                        <p>Berikut adalah data nilai ujian matematika 20 siswa:</p>
+                        
+                        <div class="data-table">
+                            <table id="score-table">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nilai</th>
+                                    <th>No</th>
+                                    <th>Nilai</th>
+                                </tr>
+                                <!-- Data akan diisi oleh JavaScript -->
+                            </table>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <canvas id="statisticsChart"></canvas>
+                        </div>
+                        
+                        <p>Hitung ukuran statistik dari data di atas:</p>
+                        <button class="data-button" onclick="calculateStatistics()"><i class="fas fa-calculator"></i> Hitung Statistik</button>
+                        
+                        <div class="result data-result" id="statisticsResult">
+                            <!-- Hasil akan ditampilkan di sini -->
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="interactive">
+                    <h2><i class="fas fa-gamepad"></i> Coba Sendiri: Analisis Data Sederhana</h2>
+                    <div class="interactive-area">
+                        <p>Analisis data tinggi badan siswa (dalam cm):</p>
+                        
+                        <div class="empty-state" id="empty-height-message" style="display: none;">
+                            <p><i class="fas fa-database fa-2x" style="color:#ccc; margin-bottom: 10px;"></i></p>
+                            <p>Belum ada data. Silakan tambahkan data menggunakan form di bawah.</p>
+                        </div>
+                        
+                        <div class="data-points" id="height-data">
+                            <!-- Data tinggi badan akan ditampilkan di sini -->
+                        </div>
+                        
+                        <div class="input-group">
+                            <div>
+                                <p><strong>Tambah Data Baru:</strong></p>
+                                <input type="number" id="new-height" placeholder="Masukkan tinggi (cm)" min="140" max="210" style="width: 200px;">
+                                <button onclick="addHeightData()">Tambah Data</button>
+                            </div>
+                            <div>
+                                <p><strong>Atau gunakan data contoh:</strong></p>
+                                <button onclick="loadSampleData()">Muat Data Contoh</button>
+                            </div>
+                        </div>
+                        
+                        <div class="btn-group">
+                            <button onclick="addMultipleData()">Tambah Beberapa Data</button>
+                            <button onclick="resetHeightData()">Reset Data</button>
+                            <button onclick="removeLastData()">Hapus Data Terakhir</button>
+                        </div>
+                        
+                        <p><strong>Tips:</strong> Anda bisa menambahkan data satu per satu, atau gunakan "Tambah Beberapa Data" untuk memasukkan beberapa data sekaligus (pisahkan dengan koma).</p>
+                        
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="heightChart"></canvas>
+                        </div>
+                        
+                        <div class="result" id="heightResult">
+                            <!-- Hasil analisis akan ditampilkan di sini -->
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="real-problem">
+                    <h2><i class="fas fa-globe-americas"></i> Contoh Masalah Nyata dengan Analisis Data</h2>
+                    <p>Berikut adalah contoh bagaimana statistika digunakan dalam kehidupan sehari-hari:</p>
+                    
+                    <div class="problem-box">
+                        <h3>Masalah 1: Analisis Nilai Ujian Sekolah</h3>
+                        <p>Sebuah sekolah ingin menganalisis nilai ujian matematika siswa kelas X. Data nilai 10 siswa adalah: 75, 80, 85, 70, 90, 95, 65, 80, 85, 88.</p>
+                        
+                        <p><strong>Pertanyaan:</strong> Hitung mean, median, dan modus dari data tersebut!</p>
+                        
+                        <button onclick="showExamSolution()">Lihat Penyelesaian</button>
+                        
+                        <div class="result" id="examResult" style="display: none;">
+                            <h4>Penyelesaian:</h4>
+                            <p>1. <strong>Mean (Rata-rata)</strong>: (75+80+85+70+90+95+65+80+85+88) ÷ 10 = 813 ÷ 10 = <strong>81.3</strong></p>
+                            <p>2. <strong>Median (Nilai Tengah)</strong>: Urutkan data: 65, 70, 75, 80, 80, 85, 85, 88, 90, 95. Median = (80+85)÷2 = <strong>82.5</strong></p>
+                            <p>3. <strong>Modus (Nilai Paling Sering Muncul)</strong>: 80 dan 85 (masing-masing muncul 2 kali) = <strong>Bimodal: 80 dan 85</strong></p>
+                        </div>
+                    </div>
+                    
+                    <div class="data-problem-box">
+                        <h3><i class="fas fa-chart-pie"></i> Masalah 2: Analisis Preferensi Makanan</h3>
+                        <p>Survei terhadap 50 siswa tentang makanan favorit menghasilkan data berikut:</p>
+                        
+                        <div class="data-table">
+                            <table>
+                                <tr>
+                                    <th>Makanan</th>
+                                    <th>Jumlah Siswa</th>
+                                    <th>Persentase</th>
+                                </tr>
+                                <tr>
+                                    <td>Pizza</td>
+                                    <td>18</td>
+                                    <td>36%</td>
+                                </tr>
+                                <tr>
+                                    <td>Burger</td>
+                                    <td>12</td>
+                                    <td>24%</td>
+                                </tr>
+                                <tr>
+                                    <td>Mie</td>
+                                    <td>10</td>
+                                    <td>20%</td>
+                                </tr>
+                                <tr>
+                                    <td>Nasi Goreng</td>
+                                    <td>6</td>
+                                    <td>12%</td>
+                                </tr>
+                                <tr>
+                                    <td>Lainnya</td>
+                                    <td>4</td>
+                                    <td>8%</td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="foodChart"></canvas>
+                        </div>
+                        
+                        <p><strong>Pertanyaan:</strong> Jika sekolah ingin menyediakan makanan untuk 200 siswa, berapa banyak porsi pizza yang harus disediakan berdasarkan preferensi ini?</p>
+                        
+                        <button class="data-button" onclick="calculateFoodPortion()">Hitung Kebutuhan</button>
+                        
+                        <div class="result data-result" id="foodResult"></div>
+                    </div>
+                    
+                    <div class="data-problem-box">
+                        <h3><i class="fas fa-trend-up"></i> Masalah 3: Analisis Tren Penjualan</h3>
+                        <p>Data penjualan toko online selama 6 bulan (dalam juta rupiah):</p>
+                        
+                        <div class="data-table">
+                            <table>
+                                <tr>
+                                    <th>Bulan</th>
+                                    <th>Jan</th>
+                                    <th>Feb</th>
+                                    <th>Mar</th>
+                                    <th>Apr</th>
+                                    <th>Mei</th>
+                                    <th>Jun</th>
+                                </tr>
+                                <tr>
+                                    <td>Penjualan</td>
+                                    <td>15</td>
+                                    <td>18</td>
+                                    <td>22</td>
+                                    <td>20</td>
+                                    <td>25</td>
+                                    <td>28</td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <p><strong>Pertanyaan Analisis:</strong> Hitung rata-rata penjualan per bulan dan prediksi penjualan bulan Juli menggunakan metode moving average (rata-rata 3 bulan terakhir).</p>
+                        
+                        <button class="data-button" onclick="calculateSalesPrediction()"><i class="fas fa-calculator"></i> Hitung Prediksi</button>
+                        
+                        <div class="result data-result" id="salesResult" style="display: none;">
+                            <h4>Hasil Analisis:</h4>
+                            <p>1. <strong>Rata-rata penjualan</strong>: (15+18+22+20+25+28) ÷ 6 = 128 ÷ 6 = <strong>21.33 juta</strong></p>
+                            <p>2. <strong>Prediksi penjualan Juli (Moving Average 3 bulan)</strong>: (20+25+28) ÷ 3 = 73 ÷ 3 = <strong>24.33 juta</strong></p>
+                            <p><strong>Penerapan di Dunia Nyata:</strong> Perusahaan menggunakan analisis seperti ini untuk perencanaan stok, anggaran, dan strategi pemasaran.</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="quiz">
+                    <h2><i class="fas fa-question-circle"></i> Kuis Singkat Statistika</h2>
+                    <div class="quiz-container">
+                        <div class="quiz-question" id="question1">
+                            <p><strong>1. Apa yang dimaksud dengan mean dalam statistika?</strong></p>
+                            <div class="quiz-option" onclick="checkQuiz(1, 1)">a) Nilai tengah setelah data diurutkan</div>
+                            <div class="quiz-option" onclick="checkQuiz(1, 2)">b) Nilai yang paling sering muncul</div>
+                            <div class="quiz-option" onclick="checkQuiz(1, 3)">c) Rata-rata dari sekumpulan data</div>
+                            <div class="quiz-option" onclick="checkQuiz(1, 4)">d) Selisih antara nilai tertinggi dan terendah</div>
+                        </div>
+                        
+                        <div class="quiz-question" id="question2">
+                            <p><strong>2. Data: 7, 5, 8, 5, 9, 6, 5. Berapa modus dari data ini?</strong></p>
+                            <div class="quiz-option" onclick="checkQuiz(2, 1)">a) 5</div>
+                            <div class="quiz-option" onclick="checkQuiz(2, 2)">b) 6</div>
+                            <div class="quiz-option" onclick="checkQuiz(2, 3)">c) 7</div>
+                            <div class="quiz-option" onclick="checkQuiz(2, 4)">d) 8</div>
+                        </div>
+                        
+                        <div class="quiz-question" id="question3">
+                            <p><strong>3. Dalam konteks penelitian, apa perbedaan antara populasi dan sampel?</strong></p>
+                            <div class="quiz-option" onclick="checkQuiz(3, 1)">a) Populasi lebih besar dari sampel</div>
+                            <div class="quiz-option" onclick="checkQuiz(3, 2)">b) Populasi adalah seluruh kelompok, sampel adalah bagiannya</div>
+                            <div class="quiz-option" onclick="checkQuiz(3, 3)">c) Sampel selalu mewakili populasi dengan sempurna</div>
+                            <div class="quiz-option" onclick="checkQuiz(3, 4)">d) Tidak ada perbedaan, keduanya sama</div>
+                        </div>
+                        
+                        <div class="quiz-question" id="question4">
+                            <p><strong>4. Manakah yang merupakan ukuran penyebaran data?</strong></p>
+                            <div class="quiz-option" onclick="checkQuiz(4, 1)">a) Mean</div>
+                            <div class="quiz-option" onclick="checkQuiz(4, 2)">b) Median</div>
+                            <div class="quiz-option" onclick="checkQuiz(4, 3)">c) Modus</div>
+                            <div class="quiz-option" onclick="checkQuiz(4, 4)">d) Simpangan Baku</div>
+                        </div>
+                        
+                        <button onclick="showQuizAnswers()">Lihat Hasil Kuis</button>
+                        <div class="result" id="quiz-result"></div>
+                    </div>
+                </section>
+            </div>
+            
+            <div class="sidebar">
+                <h2><i class="fas fa-lightbulb"></i> Fakta Menarik</h2>
+                <div class="fun-fact">
+                    <p><strong>Asal Kata "Statistika"</strong></p>
+                    <p>Kata "statistika" berasal dari bahasa Latin "status" yang berarti "negara". Awalnya, statistika digunakan untuk mengumpulkan data tentang negara untuk keperluan pemerintahan.</p>
+                </div>
+                
+                <div class="fun-fact data-fun-fact">
+                    <p><strong><i class="fas fa-database"></i> Data di Era Digital</strong></p>
+                    <p>Setiap hari, manusia menghasilkan sekitar 2.5 triliun byte data. Statistika membantu kita memahami dan mengambil keputusan dari data yang sangat besar ini!</p>
+                </div>
+                
+                <h2><i class="fas fa-calculator"></i> Kalkulator Statistika</h2>
+                <div class="interactive-area">
+                    <p>Hitung mean (rata-rata) dari data:</p>
+                    <p>Masukkan data (pisahkan dengan koma):</p>
+                    <input type="text" id="data-input" placeholder="Contoh: 70, 80, 90, 85" value="70, 80, 90, 85">
+                    <button onclick="calculateMean()">Hitung Mean</button>
+                    
+                    <div class="result" id="calculator-result"></div>
+                </div>
+                
+                <div class="data-tool">
+                    <h2><i class="fas fa-chart-bar"></i> Generator Data Acak</h2>
+                    <p>Hasilkan data acak untuk latihan:</p>
+                    <p>Jumlah data: 
+                        <select id="data-count">
+                            <option value="5">5</option>
+                            <option value="10" selected>10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </select>
+                    </p>
+                    <p>Rentang nilai: 
+                        <input type="number" id="min-value" placeholder="Min" value="50" style="width: 80px;">
+                        sampai
+                        <input type="number" id="max-value" placeholder="Max" value="100" style="width: 80px;">
+                    </p>
+                    <button class="data-button" onclick="generateRandomData()">Buat Data Acak</button>
+                    <div class="result data-result" id="random-data-result"></div>
+                </div>
+                
+                <h2><i class="fas fa-road"></i> Langkah Belajar Statistika</h2>
+                <ol>
+                    <li>Pahami konsep data, populasi, dan sampel</li>
+                    <li>Pelajari ukuran pemusatan data (mean, median, modus)</li>
+                    <li>Pelajari ukuran penyebaran data (range, varians, simpangan baku)</li>
+                    <li>Latihan mengolah dan menganalisis data nyata</li>
+                    <li>Pelajari visualisasi data (grafik, diagram)</li>
+                    <li>Terapkan pada masalah kehidupan sehari-hari</li>
+                </ol>
+            </div>
+        </div>
+        
+        <footer>
+            <p>
+                <a href="https://sites.google.com/view/rumahmath/home" target="_blank" style="color: white; text-decoration: none;">
+                    <b>BiMath:</b>
+                </a> Materi Pembelajaran Interaktif Statistika & Analisis Data &copy; 2027
+            </p>
+            <p>Dibuat dengan <i class="fas fa-heart" style="color:#ff9a00;"></i> untuk pembelajaran matematika yang menyenangkan di era digital</p>
+        </footer>
+    </div>
+
+    <script>
+        // Update progress bar based on scroll position
+        window.addEventListener('scroll', function() {
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollPercentage = (scrollTop / scrollHeight) * 100;
+            document.getElementById('progress').style.width = scrollPercentage + '%';
+        });
+        
+        // Statistics Chart
+        let statisticsChart;
+        let heightChart;
+        let foodChart;
+        
+        // Data tinggi badan - DIMULAI DENGAN KOSONG
+        let heightData = [];
+        
+        // Data nilai siswa untuk contoh
+        const studentScores = [75, 82, 90, 68, 85, 78, 92, 88, 76, 95, 81, 79, 87, 83, 89, 72, 84, 91, 77, 86];
+        
+        // Data contoh untuk dimuat jika diinginkan
+        const sampleHeightData = [160, 165, 170, 155, 175, 168, 172, 158, 162, 169, 180, 166, 171, 159, 173];
+        
+        function initCharts() {
+            // Inisialisasi chart nilai siswa
+            const ctx1 = document.getElementById('statisticsChart').getContext('2d');
+            
+            // Hitung frekuensi nilai
+            const scoreRanges = {
+                '60-69': 0,
+                '70-79': 0,
+                '80-89': 0,
+                '90-100': 0
+            };
+            
+            studentScores.forEach(score => {
+                if (score >= 60 && score <= 69) scoreRanges['60-69']++;
+                else if (score >= 70 && score <= 79) scoreRanges['70-79']++;
+                else if (score >= 80 && score <= 89) scoreRanges['80-89']++;
+                else if (score >= 90 && score <= 100) scoreRanges['90-100']++;
+            });
+            
+            statisticsChart = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['60-69', '70-79', '80-89', '90-100'],
+                    datasets: [{
+                        label: 'Jumlah Siswa',
+                        data: [scoreRanges['60-69'], scoreRanges['70-79'], scoreRanges['80-89'], scoreRanges['90-100']],
+                        backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0'],
+                        borderColor: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Jumlah Siswa'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Rentang Nilai'
+                            }
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+            
+            // Inisialisasi chart tinggi badan
+            const ctx2 = document.getElementById('heightChart').getContext('2d');
+            updateHeightChart();
+            
+            // Inisialisasi chart makanan
+            const ctx3 = document.getElementById('foodChart').getContext('2d');
+            foodChart = new Chart(ctx3, {
+                type: 'pie',
+                data: {
+                    labels: ['Pizza', 'Burger', 'Mie', 'Nasi Goreng', 'Lainnya'],
+                    datasets: [{
+                        data: [18, 12, 10, 6, 4],
+                        backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+            
+            // Tampilkan data tinggi badan (awalnya kosong)
+            displayHeightData();
+            
+            // Isi tabel nilai siswa
+            fillScoreTable();
+        }
+        
+        function fillScoreTable() {
+            const table = document.getElementById('score-table');
+            // Kosongkan isi tabel kecuali header
+            while (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+            
+            // Isi data nilai siswa
+            for (let i = 0; i < studentScores.length; i += 2) {
+                const row = table.insertRow();
+                const cell1 = row.insertCell();
+                const cell2 = row.insertCell();
+                const cell3 = row.insertCell();
+                const cell4 = row.insertCell();
+                
+                cell1.textContent = i + 1;
+                cell2.textContent = studentScores[i];
+                cell3.textContent = i + 2;
+                cell4.textContent = studentScores[i + 1] || '-';
+            }
+        }
+        
+        function displayHeightData() {
+            const container = document.getElementById('height-data');
+            const emptyMessage = document.getElementById('empty-height-message');
+            
+            // Kosongkan container
+            container.innerHTML = '';
+            
+            // Tampilkan pesan kosong jika tidak ada data
+            if (heightData.length === 0) {
+                emptyMessage.style.display = 'block';
+                container.style.display = 'none';
+            } else {
+                emptyMessage.style.display = 'none';
+                container.style.display = 'block';
+                
+                // Tampilkan judul
+                const title = document.createElement('p');
+                title.innerHTML = `<strong>Data tinggi badan (${heightData.length} data):</strong>`;
+                container.appendChild(title);
+                
+                // Tampilkan setiap data point
+                heightData.forEach((height, index) => {
+                    const dataPoint = document.createElement('span');
+                    dataPoint.className = 'data-point';
+                    dataPoint.textContent = height;
+                    dataPoint.style.backgroundColor = getColorForHeight(height);
+                    dataPoint.title = `Data ke-${index + 1}: ${height} cm`;
+                    container.appendChild(dataPoint);
+                });
+            }
+            
+            // Update chart tinggi badan
+            updateHeightChart();
+        }
+        
+        function getColorForHeight(height) {
+            if (height < 160) return '#36a2eb'; // Biru muda
+            if (height < 170) return '#4bc0c0'; // Hijau biru
+            if (height < 180) return '#ffce56'; // Kuning
+            return '#ff6384'; // Merah muda
+        }
+        
+        function updateHeightChart() {
+            if (heightChart) {
+                heightChart.destroy();
+            }
+            
+            const ctx = document.getElementById('heightChart').getContext('2d');
+            
+            // Jika tidak ada data, buat chart kosong
+            if (heightData.length === 0) {
+                heightChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['150-159', '160-169', '170-179', '180-189'],
+                        datasets: [{
+                            label: 'Jumlah Siswa',
+                            data: [0, 0, 0, 0],
+                            backgroundColor: ['#e0e0e0', '#e0e0e0', '#e0e0e0', '#e0e0e0'],
+                            borderColor: ['#cccccc', '#cccccc', '#cccccc', '#cccccc'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 5,
+                                title: {
+                                    display: true,
+                                    text: 'Jumlah Siswa'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Rentang Tinggi Badan (cm)'
+                                }
+                            }
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                enabled: false
+                            }
+                        }
+                    }
+                });
+                return;
+            }
+            
+            // Hitung frekuensi per rentang tinggi
+            const heightRanges = {
+                '150-159': 0,
+                '160-169': 0,
+                '170-179': 0,
+                '180-189': 0
+            };
+            
+            heightData.forEach(height => {
+                if (height >= 150 && height <= 159) heightRanges['150-159']++;
+                else if (height >= 160 && height <= 169) heightRanges['160-169']++;
+                else if (height >= 170 && height <= 179) heightRanges['170-179']++;
+                else if (height >= 180 && height <= 189) heightRanges['180-189']++;
+            });
+            
+            heightChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['150-159', '160-169', '170-179', '180-189'],
+                    datasets: [{
+                        label: 'Jumlah Siswa',
+                        data: [heightRanges['150-159'], heightRanges['160-169'], heightRanges['170-179'], heightRanges['180-189']],
+                        backgroundColor: ['#36a2eb', '#4bc0c0', '#ffce56', '#ff6384'],
+                        borderColor: ['#36a2eb', '#4bc0c0', '#ffce56', '#ff6384'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Jumlah Siswa'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Rentang Tinggi Badan (cm)'
+                            }
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+            
+            // Hitung dan tampilkan statistik
+            calculateHeightStatistics();
+        }
+        
+        function addHeightData() {
+            const newHeightInput = document.getElementById('new-height');
+            const newHeight = parseInt(newHeightInput.value);
+            
+            if (isNaN(newHeight) || newHeight < 140 || newHeight > 210) {
+                alert("Masukkan tinggi badan yang valid antara 140-210 cm!");
+                newHeightInput.focus();
+                return;
+            }
+            
+            heightData.push(newHeight);
+            displayHeightData();
+            newHeightInput.value = '';
+            newHeightInput.focus();
+            
+            // Tampilkan pesan sukses
+            const resultDiv = document.getElementById('heightResult');
+            resultDiv.innerHTML = `<p><i class='fas fa-check-circle' style='color:#4caf50;'></i> Data ${newHeight} cm berhasil ditambahkan. Total data: ${heightData.length}</p>`;
+            resultDiv.className = "result show";
+            
+            // Sembunyikan pesan setelah 3 detik
+            setTimeout(() => {
+                resultDiv.className = "result";
+            }, 3000);
+        }
+        
+        function addMultipleData() {
+            const input = prompt("Masukkan beberapa data tinggi badan (dalam cm), pisahkan dengan koma:\nContoh: 160, 165, 170, 155");
+            
+            if (!input || input.trim() === '') {
+                return;
+            }
+            
+            const dataStrings = input.split(',').map(item => item.trim());
+            const newData = [];
+            const invalidData = [];
+            
+            dataStrings.forEach(item => {
+                const num = parseInt(item);
+                if (!isNaN(num) && num >= 140 && num <= 210) {
+                    newData.push(num);
+                } else if (item !== '') {
+                    invalidData.push(item);
+                }
+            });
+            
+            if (newData.length === 0) {
+                alert("Tidak ada data valid yang ditambahkan. Pastikan data berupa angka antara 140-210 cm.");
+                return;
+            }
+            
+            // Tambahkan data baru ke array
+            heightData.push(...newData);
+            displayHeightData();
+            
+            // Tampilkan pesan hasil
+            const resultDiv = document.getElementById('heightResult');
+            let message = `<p><i class='fas fa-check-circle' style='color:#4caf50;'></i> ${newData.length} data berhasil ditambahkan. Total data: ${heightData.length}</p>`;
+            
+            if (invalidData.length > 0) {
+                message += `<p><i class='fas fa-exclamation-triangle' style='color:#ff9800;'></i> ${invalidData.length} data tidak valid (${invalidData.join(', ')}) diabaikan.</p>`;
+            }
+            
+            resultDiv.innerHTML = message;
+            resultDiv.className = "result show";
+        }
+        
+        function loadSampleData() {
+            heightData = [...sampleHeightData];
+            displayHeightData();
+            
+            const resultDiv = document.getElementById('heightResult');
+            resultDiv.innerHTML = `<p><i class='fas fa-database' style='color:#2196f3;'></i> Data contoh (${sampleHeightData.length} data) telah dimuat. Silakan analisis atau modifikasi data ini.</p>`;
+            resultDiv.className = "result show";
+        }
+        
+        function resetHeightData() {
+            if (heightData.length === 0) {
+                alert("Tidak ada data untuk di-reset.");
+                return;
+            }
+            
+            if (confirm(`Apakah Anda yakin ingin menghapus semua data (${heightData.length} data)?`)) {
+                heightData = [];
+                displayHeightData();
+                
+                const resultDiv = document.getElementById('heightResult');
+                resultDiv.innerHTML = `<p><i class='fas fa-trash-alt' style='color:#f44336;'></i> Semua data telah dihapus. Silakan tambahkan data baru.</p>`;
+                resultDiv.className = "result show";
+            }
+        }
+        
+        function removeLastData() {
+            if (heightData.length === 0) {
+                alert("Tidak ada data untuk dihapus.");
+                return;
+            }
+            
+            const removed = heightData.pop();
+            displayHeightData();
+            
+            const resultDiv = document.getElementById('heightResult');
+            resultDiv.innerHTML = `<p><i class='fas fa-trash-alt' style='color:#f44336;'></i> Data terakhir (${removed} cm) telah dihapus. Sisa data: ${heightData.length}</p>`;
+            resultDiv.className = "result show";
+        }
+        
+        function calculateHeightStatistics() {
+            const resultDiv = document.getElementById('heightResult');
+            
+            if (heightData.length === 0) {
+                resultDiv.innerHTML = `<p><i class='fas fa-info-circle' style='color:#2196f3;'></i> Tidak ada data untuk dianalisis. Silakan tambahkan data terlebih dahulu.</p>`;
+                resultDiv.className = "result show";
+                return;
+            }
+            
+            // Hitung mean
+            const sum = heightData.reduce((a, b) => a + b, 0);
+            const mean = sum / heightData.length;
+            
+            // Hitung median
+            const sorted = [...heightData].sort((a, b) => a - b);
+            const mid = Math.floor(sorted.length / 2);
+            const median = sorted.length % 2 === 0 ? (sorted[mid - 1] + sorted[mid]) / 2 : sorted[mid];
+            
+            // Hitung modus
+            const frequency = {};
+            let maxFreq = 0;
+            let modes = [];
+            
+            sorted.forEach(height => {
+                frequency[height] = (frequency[height] || 0) + 1;
+                if (frequency[height] > maxFreq) {
+                    maxFreq = frequency[height];
+                    modes = [height];
+                } else if (frequency[height] === maxFreq) {
+                    modes.push(height);
+                }
+            });
+            
+            // Hapus duplikat
+            modes = [...new Set(modes)];
+            
+            // Hitung range
+            const range = Math.max(...heightData) - Math.min(...heightData);
+            
+            // Hitung simpangan baku
+            const squaredDiffs = heightData.map(value => Math.pow(value - mean, 2));
+            const variance = squaredDiffs.reduce((a, b) => a + b, 0) / heightData.length;
+            const stdDev = Math.sqrt(variance);
+            
+            resultDiv.innerHTML = `
+                <h4>Hasil Analisis Tinggi Badan (${heightData.length} data)</h4>
+                <p><strong>Mean (Rata-rata):</strong> ${mean.toFixed(2)} cm</p>
+                <p><strong>Median (Nilai Tengah):</strong> ${median} cm</p>
+                <p><strong>Modus (Paling Sering):</strong> ${modes.length > 0 ? modes.join(', ') + ' cm' : 'Tidak ada modus'}</p>
+                <p><strong>Range (Jangkauan):</strong> ${range} cm</p>
+                <p><strong>Simpangan Baku:</strong> ${stdDev.toFixed(2)} cm</p>
+                <p><strong>Data Terkecil:</strong> ${Math.min(...heightData)} cm</p>
+                <p><strong>Data Terbesar:</strong> ${Math.max(...heightData)} cm</p>
+            `;
+            resultDiv.className = "result show";
+        }
+        
+        function calculateStatistics() {
+            // Hitung statistik dari studentScores
+            const sortedScores = [...studentScores].sort((a, b) => a - b);
+            const sum = sortedScores.reduce((a, b) => a + b, 0);
+            const mean = sum / sortedScores.length;
+            
+            const mid = Math.floor(sortedScores.length / 2);
+            const median = sortedScores.length % 2 === 0 ? 
+                (sortedScores[mid - 1] + sortedScores[mid]) / 2 : 
+                sortedScores[mid];
+            
+            // Hitung modus
+            const frequency = {};
+            let maxFreq = 0;
+            let modes = [];
+            
+            sortedScores.forEach(score => {
+                frequency[score] = (frequency[score] || 0) + 1;
+                if (frequency[score] > maxFreq) {
+                    maxFreq = frequency[score];
+                    modes = [score];
+                } else if (frequency[score] === maxFreq) {
+                    modes.push(score);
+                }
+            });
+            
+            modes = [...new Set(modes)];
+            
+            // Hitung range
+            const range = Math.max(...sortedScores) - Math.min(...sortedScores);
+            
+            const resultDiv = document.getElementById('statisticsResult');
+            resultDiv.innerHTML = `
+                <h4>Hasil Analisis Nilai Matematika (${studentScores.length} siswa)</h4>
+                <p><strong>Mean (Rata-rata):</strong> ${mean.toFixed(2)}</p>
+                <p><strong>Median (Nilai Tengah):</strong> ${median}</p>
+                <p><strong>Modus (Paling Sering):</strong> ${modes.length > 0 ? modes.join(', ') : 'Tidak ada modus'}</p>
+                <p><strong>Range (Jangkauan):</strong> ${range}</p>
+                <p><strong>Nilai Tertinggi:</strong> ${Math.max(...sortedScores)}</p>
+                <p><strong>Nilai Terendah:</strong> ${Math.min(...sortedScores)}</p>
+                <p><em>Data lengkap dapat dilihat pada tabel di atas.</em></p>
+            `;
+            resultDiv.className = "result data-result show";
+        }
+        
+        function showExamSolution() {
+            const resultDiv = document.getElementById('examResult');
+            if (resultDiv.style.display === 'none') {
+                resultDiv.style.display = 'block';
+                setTimeout(() => {
+                    resultDiv.className = "result show";
+                }, 10);
+            } else {
+                resultDiv.style.display = 'none';
+                resultDiv.className = "result";
+            }
+        }
+        
+        function calculateFoodPortion() {
+            const totalStudents = 200;
+            const pizzaPercentage = 36; // 36%
+            const pizzaPortions = Math.round(totalStudents * pizzaPercentage / 100);
+            
+            const resultDiv = document.getElementById('foodResult');
+            resultDiv.innerHTML = `
+                <h4>Perhitungan Kebutuhan Pizza</h4>
+                <p>Dari survei: <strong>36%</strong> siswa menyukai pizza</p>
+                <p>Jumlah total siswa: <strong>200</strong> siswa</p>
+                <p>Kebutuhan pizza: 36% × 200 = <strong>${pizzaPortions}</strong> porsi</p>
+                <p><em>Jadi, sekolah harus menyediakan sekitar ${pizzaPortions} porsi pizza.</em></p>
+            `;
+            resultDiv.className = "result data-result show";
+        }
+        
+        function calculateSalesPrediction() {
+            const resultDiv = document.getElementById('salesResult');
+            if (resultDiv.style.display === 'none') {
+                resultDiv.style.display = 'block';
+                setTimeout(() => {
+                    resultDiv.className = "result data-result show";
+                }, 10);
+            } else {
+                resultDiv.style.display = 'none';
+                resultDiv.className = "result data-result";
+            }
+        }
+        
+        // Quiz answers tracking
+        let quizAnswers = {
+            1: null,
+            2: null,
+            3: null,
+            4: null
+        };
+        
+        const correctAnswers = {
+            1: 3, // c) Rata-rata dari sekumpulan data
+            2: 1, // a) 5
+            3: 2, // b) Populasi adalah seluruh kelompok, sampel adalah bagiannya
+            4: 4  // d) Simpangan Baku
+        };
+        
+        // Function to check quiz answers
+        function checkQuiz(questionNumber, selectedOption) {
+            // Reset all options for this question
+            const questionElement = document.getElementById(`question${questionNumber}`);
+            const options = questionElement.querySelectorAll('.quiz-option');
+            options.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+            });
+            
+            // Mark selected option
+            const selectedElement = options[selectedOption - 1];
+            quizAnswers[questionNumber] = selectedOption;
+            
+            if (selectedOption === correctAnswers[questionNumber]) {
+                selectedElement.classList.add('correct');
+            } else {
+                selectedElement.classList.add('incorrect');
+                
+                // Also show the correct answer
+                const correctElement = options[correctAnswers[questionNumber] - 1];
+                correctElement.classList.add('correct');
+            }
+        }
+        
+        // Function to show quiz results
+        function showQuizAnswers() {
+            let score = 0;
+            let totalQuestions = Object.keys(quizAnswers).length;
+            
+            for (let question in quizAnswers) {
+                if (quizAnswers[question] === correctAnswers[question]) {
+                    score++;
+                }
+            }
+            
+            const resultDiv = document.getElementById('quiz-result');
+            let resultHTML = `<h3>Hasil Kuis Anda</h3>`;
+            resultHTML += `<p>Anda menjawab <strong>${score} dari ${totalQuestions}</strong> pertanyaan dengan benar.</p>`;
+            
+            if (score === totalQuestions) {
+                resultHTML += `<p><i class='fas fa-star' style='color:#ff9a00;'></i> <strong>Sempurna!</strong> Anda menguasai konsep statistika dengan baik!</p>`;
+            } else if (score >= totalQuestions / 2) {
+                resultHTML += `<p><i class='fas fa-thumbs-up' style='color:#4caf50;'></i> <strong>Bagus!</strong> Anda sudah memahami sebagian besar konsep, tetapi masih perlu latihan.</p>`;
+            } else {
+                resultHTML += `<p><i class='fas fa-book' style='color:#2c7873;'></i> <strong>Perlu belajar lebih</strong>. Coba ulangi materi dan coba lagi!</p>`;
+            }
+            
+            resultDiv.innerHTML = resultHTML;
+            resultDiv.className = "result show";
+        }
+        
+        // Function to calculate mean from input
+        function calculateMean() {
+            const input = document.getElementById('data-input').value;
+            const dataString = input.split(',').map(item => item.trim());
+            const data = [];
+            
+            for (let item of dataString) {
+                const num = parseFloat(item);
+                if (!isNaN(num)) {
+                    data.push(num);
+                }
+            }
+            
+            if (data.length === 0) {
+                alert("Masukkan data yang valid!");
+                return;
+            }
+            
+            const sum = data.reduce((a, b) => a + b, 0);
+            const mean = sum / data.length;
+            
+            document.getElementById('calculator-result').innerHTML = 
+                `<h4><i class='fas fa-check-circle' style='color:#4caf50;'></i> Hasil Perhitungan</h4>
+                 <p>Data: <strong>${data.join(', ')}</strong></p>
+                 <p>Jumlah data: <strong>${data.length}</strong></p>
+                 <p>Total: <strong>${sum}</strong></p>
+                 <p>Mean (Rata-rata): <strong>${mean.toFixed(2)}</strong></p>`;
+            document.getElementById('calculator-result').className = "result show";
+        }
+        
+        // Function to generate random data
+        function generateRandomData() {
+            const count = parseInt(document.getElementById('data-count').value);
+            const min = parseInt(document.getElementById('min-value').value);
+            const max = parseInt(document.getElementById('max-value').value);
+            
+            if (isNaN(count) || isNaN(min) || isNaN(max) || min >= max) {
+                alert("Masukkan nilai yang valid!");
+                return;
+            }
+            
+            const data = [];
+            for (let i = 0; i < count; i++) {
+                data.push(Math.floor(Math.random() * (max - min + 1)) + min);
+            }
+            
+            // Hitung statistik
+            const sum = data.reduce((a, b) => a + b, 0);
+            const mean = sum / data.length;
+            const sorted = [...data].sort((a, b) => a - b);
+            const mid = Math.floor(sorted.length / 2);
+            const median = sorted.length % 2 === 0 ? (sorted[mid - 1] + sorted[mid]) / 2 : sorted[mid];
+            
+            document.getElementById('random-data-result').innerHTML = 
+                `<h4>Data Acak yang Dihasilkan</h4>
+                 <p>Data: <strong>${data.join(', ')}</strong></p>
+                 <p>Jumlah data: <strong>${data.length}</strong></p>
+                 <p>Rentang: <strong>${min} - ${max}</strong></p>
+                 <p>Mean: <strong>${mean.toFixed(2)}</strong></p>
+                 <p>Median: <strong>${median}</strong></p>
+                 <p><em>Gunakan data ini untuk latihan menghitung statistik lainnya!</em></p>`;
+            document.getElementById('random-data-result').className = "result data-result show";
+        }
+        
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                document.getElementById('progress').style.width = '5%';
+            }, 300);
+            
+            // Initialize the charts
+            initCharts();
+            
+            // Show one fun fact randomly
+            const funFacts = document.querySelectorAll('.fun-fact');
+            funFacts.forEach(fact => {
+                fact.style.display = 'block';
+            });
+            
+            // Fokus ke input field
+            document.getElementById('new-height').focus();
+        });
+    </script>
+</body>
+</html>
